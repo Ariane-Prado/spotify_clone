@@ -33,7 +33,7 @@ class _TelaBaseState extends State<TelaBase> {
     final telas = [
       TelaHome(store: homeStore),
       const TelaBuscar(),
-      TelaBiblioteca(store: bibliotecaStore),
+      TelaBiblioteca(store: bibliotecaStore, homeStore: homeStore),
     ];
 
     return Scaffold(

@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import '../store/biblioteca_store.dart';
+import '../store/home_store.dart';
 import '../servico/entidade/playlist.dart';
+import 'tela_curtidas.dart';
 import 'widgets/cores_spotify.dart';
 import 'widgets/modal_criar.dart';
 
 class TelaBiblioteca extends StatelessWidget {
   final BibliotecaStore store;
-  const TelaBiblioteca({required this.store, super.key});
+  final HomeStore homeStore;
+  const TelaBiblioteca({required this.store, required this.homeStore, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -121,6 +124,16 @@ class TelaBiblioteca extends StatelessWidget {
     final ehArtista = item.tipo == 'artista';
 
     return GestureDetector(
+      onTap: () {
+        if (item.id == 'b1') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => TelaCurtidas(store: homeStore),
+            ),
+          );
+        }
+      },
       onLongPress: () => _mostrarOpcoes(context, item),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 6),
