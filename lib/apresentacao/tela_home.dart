@@ -3,8 +3,8 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import '../store/home_store.dart';
 import '../servico/entidade/playlist.dart';
 import '../servico/entidade/musica.dart';
+import '../rotas.dart';
 import 'tela_drawer.dart';
-import 'tela_curtidas.dart';
 import 'widgets/cores_spotify.dart';
 
 class TelaHome extends StatelessWidget {
@@ -176,10 +176,9 @@ class TelaHome extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         if (item.id == 'a1') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => TelaCurtidas(store: store)),
-          );
+          Navigator.pushNamed(context, routeCurtidas, arguments: store);
+        } else {
+          Navigator.pushNamed(context, routePlaylist, arguments: {'playlist': item, 'store': store});
         }
       },
       child: Container(

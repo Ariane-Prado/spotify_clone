@@ -64,11 +64,11 @@ mixin _$BibliotecaStore on BibliotecaStoreBase, Store {
   }
 
   @override
-  void adicionarPlaylist(String nome) {
+  void adicionarPlaylist(String nome, {List<String>? musicaIds}) {
     final _$actionInfo = _$BibliotecaStoreBaseActionController.startAction(
         name: 'BibliotecaStoreBase.adicionarPlaylist');
     try {
-      return super.adicionarPlaylist(nome);
+      return super.adicionarPlaylist(nome, musicaIds: musicaIds);
     } finally {
       _$BibliotecaStoreBaseActionController.endAction(_$actionInfo);
     }

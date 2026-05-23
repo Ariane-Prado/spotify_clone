@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import '../../store/biblioteca_store.dart';
+import '../../store/home_store.dart';
 import 'cores_spotify.dart';
 
 class ModalCriar extends StatefulWidget {
   final BibliotecaStore store;
-  const ModalCriar({required this.store, super.key});
+  final HomeStore? homeStore;
+  const ModalCriar({required this.store, this.homeStore, super.key});
 
   @override
   State<ModalCriar> createState() => _ModalCriarState();
@@ -19,11 +21,13 @@ class _ModalCriarState extends State<ModalCriar> {
     super.dispose();
   }
 
+  final Set<String> _selecionadas = {};
+
   void _criarPlaylist() {
     final nome = _controlador.text.trim();
 
     if (nome.isNotEmpty) {
-      widget.store.adicionarPlaylist(nome);
+      widget.store.adicionarPlaylist(nome, musicaIds: _selecionadas.toList());
       Navigator.pop(context);
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -38,6 +42,41 @@ class _ModalCriarState extends State<ModalCriar> {
 
   @override
   Widget build(BuildContext context) {
+    Widget musicSelector = const SizedBox.shrink();
+    if (widget.homeStore != null) {
+      musicSelector = Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('Adicionar músicas', style: TextStyle(color: CoresSpotify.branco, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 8),
+          SizedBox(
+            height: 140,
+            child: ListView.builder(
+              itemCount: widget.homeStore!.musicas.length,
+              itemBuilder: (_, i) {
+                final m = widget.homeStore!.musicas[i];
+                final checked = _selecionadas.contains(m.id);
+                return CheckboxListTile(
+                  title: Text(m.titulo, style: const TextStyle(color: CoresSpotify.branco)),
+                  subtitle: Text(m.artista, style: const TextStyle(color: CoresSpotify.cinza)),
+                  value: checked,
+                  activeColor: CoresSpotify.verde,
+                  onChanged: (v) {
+                    setState(() {
+                      if (v == true) {
+                        _selecionadas.add(m.id);
+                      } else {
+                        _selecionadas.remove(m.id);
+                      }
+                    });
+                  },
+                );
+              },
+            ),
+          ),
+        ],
+      );
+    }
     return Container(
       decoration: const BoxDecoration(
         color: CoresSpotify.fundoModal,
@@ -73,6 +112,7 @@ class _ModalCriarState extends State<ModalCriar> {
             onSubmitted: (_) => _criarPlaylist(),
           ),
           const SizedBox(height: 20),
+          musicSelector,
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [

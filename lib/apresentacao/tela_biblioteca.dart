@@ -3,7 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import '../store/biblioteca_store.dart';
 import '../store/home_store.dart';
 import '../servico/entidade/playlist.dart';
-import 'tela_curtidas.dart';
+import '../rotas.dart';
 import 'widgets/cores_spotify.dart';
 import 'widgets/modal_criar.dart';
 
@@ -126,12 +126,9 @@ class TelaBiblioteca extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         if (item.id == 'b1') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => TelaCurtidas(store: homeStore),
-            ),
-          );
+          Navigator.pushNamed(context, routeCurtidas, arguments: homeStore);
+        } else {
+          Navigator.pushNamed(context, routePlaylist, arguments: {'playlist': item, 'store': homeStore});
         }
       },
       onLongPress: () => _mostrarOpcoes(context, item),
@@ -184,15 +181,13 @@ class TelaBiblioteca extends StatelessWidget {
                 ],
               ),
             ),
-            Observer(
-              builder: (_) => IconButton(
-                icon: Icon(
-                  item.curtida ? Icons.favorite : Icons.favorite_border,
-                  color: item.curtida ? CoresSpotify.verde : CoresSpotify.cinza,
-                  size: 20,
-                ),
-                onPressed: () => store.toggleCurtirPlaylist(item.id),
+            IconButton(
+              icon: Icon(
+                item.curtida ? Icons.favorite : Icons.favorite_border,
+                color: item.curtida ? CoresSpotify.verde : CoresSpotify.cinza,
+                size: 20,
               ),
+              onPressed: () => store.toggleCurtirPlaylist(item.id),
             ),
           ],
         ),
@@ -284,7 +279,7 @@ class TelaBiblioteca extends StatelessWidget {
         padding: EdgeInsets.only(
           bottom: MediaQuery.of(context).viewInsets.bottom,
         ),
-        child: ModalCriar(store: store),
+        child: ModalCriar(store: store, homeStore: homeStore),
       ),
     );
   }

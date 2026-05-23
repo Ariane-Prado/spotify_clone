@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../rotas.dart';
 import 'widgets/cores_spotify.dart';
 
 class TelaBuscar extends StatelessWidget {
@@ -54,7 +55,11 @@ class TelaBuscar extends StatelessWidget {
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: 4,
-                  itemBuilder: (_, i) => _cardVertical('Vídeo ${i + 1}'),
+                  itemBuilder: (_, i) => _cardVertical(
+                    context,
+                    'Vídeo ${i + 1}',
+                    'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+                  ),
                 ),
               ),
               const SizedBox(height: 24),
@@ -68,7 +73,11 @@ class TelaBuscar extends StatelessWidget {
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: 4,
-                  itemBuilder: (_, i) => _cardVertical('Episódio ${i + 1}'),
+                  itemBuilder: (_, i) => _cardVertical(
+                    context,
+                    'Episódio ${i + 1}',
+                    'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+                  ),
                 ),
               ),
             ],
@@ -78,32 +87,40 @@ class TelaBuscar extends StatelessWidget {
     );
   }
 
-  Widget _cardVertical(String titulo) {
-    return Container(
-      width: 140,
-      margin: const EdgeInsets.only(right: 12),
-      child: Stack(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Container(
-              width: 140, height: 210,
-              color: CoresSpotify.fundoCard,
-              child: const Icon(Icons.play_circle, color: CoresSpotify.cinza, size: 40),
-            ),
-          ),
-          Positioned(
-            bottom: 12, left: 12, right: 12,
-            child: Text(
-              titulo,
-              style: const TextStyle(
-                color: CoresSpotify.branco,
-                fontWeight: FontWeight.bold, fontSize: 14,
+  Widget _cardVertical(BuildContext context, String titulo, String videoUrl) {
+    return GestureDetector(
+      onTap: () => Navigator.pushNamed(context, routeVideo, arguments: {
+        'videoUrl':     videoUrl,
+        'titulo':       titulo,
+        'artista':      '',
+        'playlistNome': 'Explore videoclipes',
+      }),
+      child: Container(
+        width: 140,
+        margin: const EdgeInsets.only(right: 12),
+        child: Stack(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Container(
+                width: 140, height: 210,
+                color: CoresSpotify.fundoCard,
+                child: const Icon(Icons.play_circle, color: CoresSpotify.cinza, size: 40),
               ),
-              maxLines: 2,
             ),
-          ),
-        ],
+            Positioned(
+              bottom: 12, left: 12, right: 12,
+              child: Text(
+                titulo,
+                style: const TextStyle(
+                  color: CoresSpotify.branco,
+                  fontWeight: FontWeight.bold, fontSize: 14,
+                ),
+                maxLines: 2,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

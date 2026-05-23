@@ -21,6 +21,7 @@ abstract class BibliotecaStoreBase with Store {
       subtitulo: 'Playlist • Ariane Prado',
       fixada: true,
       baixada: true,
+      musicaIds: ['ms1','ms2','ms3'],
     ),
     Playlist(
       id: 'b2',
@@ -36,6 +37,7 @@ abstract class BibliotecaStoreBase with Store {
       tipo: 'playlist',
       subtitulo: 'Playlist',
       baixada: true,
+      musicaIds: ['ms4','ms5'],
     ),
     Playlist(
       id: 'b4',
@@ -43,6 +45,7 @@ abstract class BibliotecaStoreBase with Store {
       imagemUrl: '',
       tipo: 'playlist',
       subtitulo: 'Playlist • Nick',
+      musicaIds: ['ms4'],
     ),
   ]);
 
@@ -54,6 +57,10 @@ abstract class BibliotecaStoreBase with Store {
       return itens.where((i) => i.tipo == 'podcast').toList();
     } else if (filtroAtivo == 'Álbuns') {
       return itens.where((i) => i.tipo == 'album').toList();
+    } else if (filtroAtivo == 'Artistas') {
+      return itens.where((i) => i.tipo == 'artista').toList();
+    } else if (filtroAtivo == 'Baixado') {
+      return itens.where((i) => i.baixada).toList();
     }
     return itens.toList();
   }
@@ -64,13 +71,14 @@ abstract class BibliotecaStoreBase with Store {
   }
 
   @action
-  void adicionarPlaylist(String nome) {
+  void adicionarPlaylist(String nome, {List<String>? musicaIds}) {
     final novaPlaylist = Playlist(
       id: 'playlist_${DateTime.now().millisecondsSinceEpoch}',
       nome: nome,
       imagemUrl: '',
       tipo: 'playlist',
       subtitulo: 'Playlist • Você',
+      musicaIds: musicaIds ?? const [],
     );
     itens.add(novaPlaylist);
     _salvar();
@@ -86,8 +94,7 @@ abstract class BibliotecaStoreBase with Store {
   void toggleCurtirPlaylist(String id) {
     final index = itens.indexWhere((item) => item.id == id);
     if (index >= 0) {
-      itens[index].curtida = !itens[index].curtida;
-      itens[index] = itens[index];
+      itens[index] = itens[index].copyWith(curtida: !itens[index].curtida);
       _salvar();
     }
   }
@@ -106,6 +113,9 @@ abstract class BibliotecaStoreBase with Store {
           dados.map(Playlist.fromJson),
         );
       });
+    } else {
+      // salva itens iniciais na persistência para primeira execução
+      _salvar();
     }
   }
 }

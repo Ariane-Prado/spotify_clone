@@ -3,6 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import '../store/home_store.dart';
 import '../servico/entidade/musica.dart';
 import 'widgets/cores_spotify.dart';
+import 'widgets/mini_player.dart';
 
 class TelaCurtidas extends StatelessWidget {
   final HomeStore store;
@@ -26,6 +27,7 @@ class TelaCurtidas extends StatelessWidget {
           ),
         ),
       ),
+      bottomNavigationBar: MiniPlayer(store: store),
       body: Observer(
         builder: (_) {
           final lista = store.musicasCurtidasLista;
@@ -54,7 +56,7 @@ class TelaCurtidas extends StatelessWidget {
     return Observer(
       builder: (_) {
         final curtida = store.estaCurtida(musica.id);
-        final estaToando = store.musicaAtual?.id == musica.id && store.tocando;
+        final estaTocando = store.musicaAtual?.id == musica.id && store.tocando;
 
         return ListTile(
           contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
@@ -65,14 +67,14 @@ class TelaCurtidas extends StatelessWidget {
               color: CoresSpotify.fundoCard,
               child: Icon(
                 Icons.music_note,
-                color: estaToando ? CoresSpotify.verde : CoresSpotify.cinza,
+                color: estaTocando ? CoresSpotify.verde : CoresSpotify.cinza,
               ),
             ),
           ),
           title: Text(
             musica.titulo,
             style: TextStyle(
-              color: estaToando ? CoresSpotify.verde : CoresSpotify.branco,
+              color: estaTocando ? CoresSpotify.verde : CoresSpotify.branco,
               fontWeight: FontWeight.bold,
               fontSize: 15,
             ),

@@ -6,7 +6,8 @@ class Playlist {
   final String subtitulo;
   final bool fixada;
   final bool baixada;
-  bool curtida;
+  final bool curtida;
+  final List<String> musicaIds;
 
   Playlist({
     required this.id,
@@ -17,6 +18,7 @@ class Playlist {
     this.fixada = false,
     this.baixada = false,
     this.curtida = false,
+    this.musicaIds = const [],
   });
 
   Map<String, dynamic> toJson() => {
@@ -28,7 +30,20 @@ class Playlist {
     'fixada': fixada,
     'baixada': baixada,
     'curtida': curtida,
+    'musicaIds': musicaIds,
   };
+
+  Playlist copyWith({bool? curtida}) => Playlist(
+    id: id,
+    nome: nome,
+    imagemUrl: imagemUrl,
+    tipo: tipo,
+    subtitulo: subtitulo,
+    fixada: fixada,
+    baixada: baixada,
+    curtida: curtida ?? this.curtida,
+    musicaIds: musicaIds,
+  );
 
   factory Playlist.fromJson(Map<String, dynamic> json) => Playlist(
     id: json['id'] as String,
@@ -39,5 +54,6 @@ class Playlist {
     fixada: json['fixada'] as bool? ?? false,
     baixada: json['baixada'] as bool? ?? false,
     curtida: json['curtida'] as bool? ?? false,
+    musicaIds: (json['musicaIds'] as List<dynamic>?)?.map((e) => e as String).toList() ?? const [],
   );
 }

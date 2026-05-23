@@ -86,7 +86,7 @@ class _TelaBaseState extends State<TelaBase> {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
-      builder: (_) => ModalCriar(store: bibliotecaStore),
+      builder: (_) => ModalCriar(store: bibliotecaStore, homeStore: homeStore),
     );
   }
 }
