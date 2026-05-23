@@ -1,0 +1,35 @@
+name: spotify
+description: "Clone do Spotify feito em Flutter"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.5.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+
+  # Gerenciamento de estado reativo
+  mobx: ^2.3.3
+  flutter_mobx: ^2.2.1
+
+  # Persistência local
+  shared_preferences: ^2.3.2
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+  # Gera os arquivos .g.dart do MobX
+  build_runner: ^2.4.12
+  mobx_codegen: ^2.6.1
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
